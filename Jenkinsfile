@@ -9,6 +9,10 @@ pipeline {
     CI = 'true'
   }
 
+  parameters {
+    booleanParam(name: 'RUN_MUTATION', defaultValue: false, description: 'Executar testes de mutacao com Stryker')
+  }
+
   stages {
     stage('Checkout') {
       steps {
@@ -43,6 +47,12 @@ pipeline {
     }
 
     stage('Testes de mutacao') {
+      when {
+        expression { params.RUN_MUTATION }
+      }
+      options {
+        timeout(time: 10, unit: 'MINUTES')
+      }
       steps {
         sh 'yarn run test:mutation'
       }
