@@ -1,9 +1,8 @@
 pipeline {
-  agent {
-    docker {
-      image 'mcr.microsoft.com/playwright:v1.47.2-jammy'
-      args '-u root'
-    }
+  agent any
+
+  tools {
+    nodejs 'Node 24'
   }
 
   environment {
@@ -21,6 +20,7 @@ pipeline {
       steps {
         sh 'corepack enable'
         sh 'yarn install --frozen-lockfile'
+        sh 'npx playwright install chromium'
       }
     }
 
