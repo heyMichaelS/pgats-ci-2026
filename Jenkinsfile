@@ -20,7 +20,7 @@ pipeline {
       steps {
         sh 'npm install -g yarn'
         sh 'yarn install --frozen-lockfile'
-        sh 'npx playwright install chromium'
+        sh 'npx playwright install --with-deps chromium'
       }
     }
 
