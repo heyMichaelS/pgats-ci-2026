@@ -1,4 +1,4 @@
-# Ci de Nivel 01 - Disparo Manual atraves de clique 
+# Ci de Nivel 01 - Disparo Manual atraves de clique
 
 name: 'Execução Manual - Exercício 01'
 
@@ -11,35 +11,35 @@ on:
 #tarefas dentro da piline = jobs
 
 jobs:
-    # job 1 - nome do job
-    e2e-test:
-        # ambiente de execução
-        runs-on: ubuntu-latest
+  # job 1 - nome do job
+  e2e-test:
+    # ambiente de execução
+    runs-on: ubuntu-latest
 
-        # passos do job
-        steps:
-            # passo 1 - nome do passo
-            - name: 'Checkout do Código'
-              uses: actions/checkout@v4
+    # passos do job
+    steps:
+      # passo 1 - nome do passo
+      - name: 'Checkout do Código'
+        uses: actions/checkout@v4
 
-            # passo 2 - nome do passo
-            - name: 'Configurar Node.js'
-              uses: actions/setup-node@v4
-              with:
-                node-version: '24.x'
+      # passo 2 - nome do passo
+      - name: 'Configurar Node.js'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24.x'
 
-            # passo 3 - instalção do yarn
-            - name: 'Instalar Dependências'
-              run: npm install -g yarn
-         
-            # passo 4 - nome do passo
-            - name: 'Instalar as dependencias do projeto'
-              run: yarn
+      # passo 3 - instalção do yarn
+      - name: 'Instalar Dependências'
+        run: npm install -g yarn
 
-            - name: 'Intalando Browser do Playwright'
-              run: yarn playwright install
-            # passo 6 - Executar os testes E2E
-            - name : 'Executar os Testes E2E'
-              run: yarn run e2e
+      # passo 4 - nome do passo
+      - name: 'Instalar as dependencias do projeto'
+        run: yarn
+
+      - name: 'Intalando Browser do Playwright'
+        run: yarn playwright install
+      # passo 6 - Executar os testes E2E
+      - name: 'Executar os Testes E2E'
+        run: yarn run e2e
 
 #
