@@ -1,0 +1,60 @@
+name: 'Execucao com Self-hosted Agent'
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  checks: write
+
+jobs:
+  self-hosted-ci:
+    name: 'Pipeline no agent local'
+    runs-on: [self-hosted, windows, x64]
+
+    steps:
+      - name: 'Checkout do codigo'
+        uses: actions/checkout@v4
+
+      - name: 'Configurar Node.js'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24.x'
+
+      - name: 'Instalar Yarn'
+        run: npm install -g yarn
+
+      - name: 'Instalar dependencias'
+        run: yarn install --frozen-lockfile
+
+      - name: 'Instalar browser do Playwright'
+        run: npx playwright install chromium
+
+      - name: 'Executar lint'
+        run: yarn run lint
+
+      - name: 'Executar testes unitarios'
+        run: yarn run test
+
+      - name: 'Executar testes E2E'
+        run: yarn run e2e
+
+      - name: 'Publicar relatorio dos testes E2E'
+        uses: dorny/test-reporter@v3
+        if: ${{ !cancelled() }}
+        with:
+          name: 'Relatorio Playwright E2E - Self-hosted'
+          path: 'results.xml'
+          reporter: 'java-junit'
+          use-actions-summary: 'true'
+
+      - name: 'Salvar relatorios como artefatos'
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: 'relatorios-self-hosted'
+          path: |
+            results.xml
+            playwright-report/
+            test-results/
+            reports/
