@@ -8,6 +8,10 @@ name: 'Execução Manual - Exercício 01'
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+  checks: write
+
 #tarefas dentro da piline = jobs
 
 jobs:
@@ -41,5 +45,14 @@ jobs:
       # passo 6 - Executar os testes E2E
       - name: 'Executar os Testes E2E'
         run: yarn run e2e
+
+      - name: 'Publicar Relatorio dos Testes E2E'
+        uses: dorny/test-reporter@v3
+        if: ${{ !cancelled() }}
+        with:
+          name: 'Relatorio Playwright E2E'
+          path: 'results.xml'
+          reporter: 'java-junit'
+          use-actions-summary: 'true'
 
 #
