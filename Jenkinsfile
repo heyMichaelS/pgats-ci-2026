@@ -18,7 +18,7 @@ pipeline {
 
     stage('Instalar dependencias') {
       steps {
-        sh 'corepack enable'
+        sh 'npm install -g yarn'
         sh 'yarn install --frozen-lockfile'
         sh 'npx playwright install chromium'
       }
