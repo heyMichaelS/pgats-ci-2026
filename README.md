@@ -64,6 +64,56 @@ Node.js e Playwright. Tambem foi identificado que os testes de mutacao com
 Stryker podem demorar bastante, por isso eles foram configurados como opcionais
 por meio do parametro `RUN_MUTATION`.
 
+#### Evidencias da execucao no Jenkins
+
+O Jenkins foi executado localmente em container Docker usando a imagem
+`jenkins/jenkins:lts`. O container utilizado ficou publicado na porta `8080`,
+permitindo acessar a interface pelo endereco `http://localhost:8080`.
+
+![Container Jenkins em execucao no Docker Desktop](docs/images/docker-jenkins-container.png)
+
+A pipeline foi executada pelo job `pgats-ci-jenkins` e finalizou com sucesso. A
+build exibiu status verde, sem falhas nos testes, e gerou artefatos da
+construcao.
+
+![Build Jenkins executada com sucesso](docs/images/jenkins-success-build.png)
+
+Trecho do console da execucao bem-sucedida:
+
+```text
+Started by user Michael Felipe Santos Silva
+Obtained Jenkinsfile from git https://github.com/heyMichaelS/pgats-ci-2026
+Running on Jenkins in /var/jenkins_home/workspace/pgats-ci-jenkins
+
+[Pipeline] stage
+[Pipeline] { (Lint)
+Checking formatting...
+All matched files use Prettier code style!
+Done in 4.70s.
+
+[Pipeline] stage
+[Pipeline] { (Testes unitarios)
+Test Suites: 16 passed, 16 total
+Tests:       42 passed, 42 total
+
+[Pipeline] stage
+[Pipeline] { (Testes E2E)
+Running 3 tests using 1 worker
+3 passed (4.4s)
+
+Stage "Testes de mutacao" skipped due to when conditional
+
+[Pipeline] End of Pipeline
+Finished: SUCCESS
+```
+
+Durante os testes, tambem foi observado que o teste de mutacao com Stryker podia
+deixar a execucao muito demorada. Por isso, a etapa foi mantida no `Jenkinsfile`,
+mas passou a ser controlada pelo parametro `RUN_MUTATION`, ficando desativada por
+padrao na pipeline principal.
+
+![Teste de mutacao com Stryker demorando na execucao](docs/images/jenkins-mutation-optional.png)
+
 ### GitHub Actions Marketplace
 
 Foi adicionada ao workflow do GitHub Actions a action `dorny/test-reporter`,
